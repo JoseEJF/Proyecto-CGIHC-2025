@@ -1,19 +1,19 @@
-Agua
-Plantas
-Macetas
-Letreros
+Agua (Hecho)
+Plantas (Hecho)
+Macetas (Hecho)
+Letreros (Hecho)
 Pez Tropical
 Pulpo
 Tiburón
 Mantarraya
 Tortuga
-Lámparas
-Peceras
+Lámparas (Hecho)
+Peceras (Hecho)
 Pinguinos
-Mesas
-Sillones
-Anémonas
-Piedras
+Mesas (Hecho)
+Sillones (Hecho)
+Anémonas (Hech0)
+Piedras (Hecho)
 Pez Globo
 Calamar
 Delfín
