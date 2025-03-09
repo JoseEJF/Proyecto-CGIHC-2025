@@ -2,11 +2,11 @@ Agua (Hecho)
 Plantas (Hecho)
 Macetas (Hecho)
 Letreros (Hecho)
-Pez Tropical
-Pulpo
-Tiburón
-Mantarraya
-Tortuga
+Pez Tropical (Hecho)
+Pulpo (Hecho)
+Tiburón (Hecho)
+Mantarraya (Hecho)
+Tortuga (Hecho)
 Lámparas (Hecho)
 Peceras (Hecho)
 Pinguinos
@@ -18,10 +18,10 @@ Pez Globo
 Calamar
 Delfín
 Arrecife
-Témpanos de hielo
-Focas
-Pez payaso
-Esponjas marinas
+Témpanos de hielo (Hecho)
+Focas (Hecho)
+Pez payaso (Hecho)
+Esponjas marinas (Hecho)
 Pez linterna
 Cangrejo gigante
 Gaviotas
