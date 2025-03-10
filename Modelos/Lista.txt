@@ -14,17 +14,17 @@ Mesas (Hecho)
 Sillones (Hecho)
 Anémonas (Hech0)
 Piedras (Hecho)
-Pez Globo
-Calamar
-Delfín
-Arrecife
+Pez Globo (Hecho)
+Calamar (Hecho)
+Delfín (Hecho)
+Arrecife (Hecho)
 Témpanos de hielo (Hecho)
 Focas (Hecho)
 Pez payaso (Hecho)
 Esponjas marinas (Hecho)
-Pez linterna
-Cangrejo gigante
-Gaviotas
-Conchas marinas
-Estrella de mar 
-Mangle (árbol con parte sumergida)
+Pez linterna (Hecho)
+Cangrejo gigante (Hecho)
+Gaviotas (Hecho)
+Conchas marinas 
+Estrella de mar  (Hecho)
+Manglar (Hecho)
