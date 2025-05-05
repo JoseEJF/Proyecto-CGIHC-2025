@@ -1,0 +1,37 @@
+GUÍA DE USO DE TEXTURAS PARA EL MODELO DE CAMARÓN
+================================================
+
+Estas texturas han sido generadas para reemplazar los materiales procedurales del modelo en Blender.
+Para obtener el mejor resultado visual al importar el modelo en otros programas, utiliza estas texturas de la siguiente manera:
+
+1. Material (cuerpo principal oscuro metálico):
+   - Difusa/Albedo: Material_diffuse.png
+   - Metálico: Material_metallic.png
+   - Rugosidad: Material_roughness.png
+
+2. Material_Extremidades (partes naranjas):
+   - Difusa/Albedo: Material_Extremidades_diffuse.png
+   - Rugosidad: Material_Extremidades_roughness.png
+   - Metálico: 0.0 (no metálico)
+
+3. EscapeButtonMaterial.001 (partes naranjas con textura):
+   - Difusa/Albedo: EscapeButtonMaterial_001_diffuse.png
+   - Mapa Normal: EscapeButtonMaterial_001_normal.png
+   - Rugosidad: EscapeButtonMaterial_001_roughness.png
+   - Metálico: 0.0 (no metálico)
+
+Estas texturas son aproximaciones de los materiales procedurales originales en Blender.
+Para obtener resultados más precisos, puede ser necesario ajustar algunos parámetros en el programa destino.
+
+La estructura de archivos es la siguiente:
+- carpeta: camaron_export/
+  - archivo: camaron.fbx (modelo 3D)
+  - carpeta: fbm/ (texturas)
+    - Material_diffuse.png
+    - Material_metallic.png
+    - Material_roughness.png
+    - Material_Extremidades_diffuse.png
+    - Material_Extremidades_roughness.png
+    - EscapeButtonMaterial_001_diffuse.png
+    - EscapeButtonMaterial_001_normal.png
+    - EscapeButtonMaterial_001_roughness.png
