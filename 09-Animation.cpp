@@ -105,6 +105,16 @@ Model* iceberg;
 Model* letrero;
 Model* maceta;
 Model* planta;
+Model* iglu;
+Model* palmera;
+Model* arbusto;
+
+Model* pepino;
+Model* camaron;
+Model* mesa;
+Model* piedra;
+Model* manglar;
+Model* arrecife;
 
 
 // Modelos animados
@@ -124,6 +134,22 @@ AnimatedModel* tiburonBlanco;
 AnimatedModel* pezPequeno;
 AnimatedModel* pezTropical;
 AnimatedModel* pezPayaso;
+AnimatedModel* pezEspada;
+AnimatedModel* cocodrilo;
+AnimatedModel* serpiente;
+AnimatedModel* osoPolar;
+AnimatedModel* medusa;
+AnimatedModel* tiburonMartillo;
+AnimatedModel* orca;
+AnimatedModel* tortuga;
+AnimatedModel* pinguino;
+AnimatedModel* langosta;
+AnimatedModel* pezLabios;
+AnimatedModel* manati;
+AnimatedModel* caballito;
+
+
+
 float tradius = 10.0f;
 float theta = 0.0f;
 float alpha = 0.0f;
@@ -236,6 +262,18 @@ bool Start() {
 	letrero = new Model("models/IllumModels/Letrero.fbx");
 	maceta = new Model("models/IllumModels/maceta.fbx");
 	planta = new Model("models/IllumModels/planta.fbx");
+	iglu = new Model("models/IllumModels/iglu.fbx");
+	palmera = new Model("models/IllumModels/palmera.fbx");
+	anemona = new Model("models/IllumModels/anemona.fbx");
+	arbusto = new Model("models/IllumModels/bush.fbx");
+
+	pepino = new Model("models/IllumModels/pepino.fbx");
+	camaron = new Model("models/IllumModels/camaron.fbx");
+	arrecife = new Model("models/IllumModels/arrecife.fbx");
+	manglar = new Model("models/IllumModels/manglar.fbx");
+	mesa = new Model("models/IllumModels/mesa.fbx");
+	piedra = new Model("models/IllumModels/piedra.fbx");
+
 
 
 
@@ -254,20 +292,36 @@ bool Start() {
 	foca = new AnimatedModel("models/IllumModels/foca.fbx");
 	mantarraya = new AnimatedModel("models/IllumModels/mantarraya.fbx");
 	pulpo = new AnimatedModel("models/IllumModels/pulpoReal.fbx");
-	//cangrejo = new AnimatedModel("models/IllumModels/cangrejo.fbx");
 	pezPequeno= new AnimatedModel("models/IllumModels/PezPequeno.fbx");
+	pezTropical = new AnimatedModel("models/IllumModels/PezTropical.fbx");
+	pezPayaso = new AnimatedModel("models/IllumModels/pezpayaso.fbx");
+	tiburonBlanco = new AnimatedModel("models/IllumModels/TiburonBlanco.fbx");
+	pezEspada = new AnimatedModel("models/IllumModels/pezespada.fbx");
+	cocodrilo = new AnimatedModel("models/IllumModels/cocodrilo.fbx");
+	serpiente = new AnimatedModel("models/IllumModels/serpiente.fbx");
+	osoPolar = new AnimatedModel("models/IllumModels/osopolar.fbx");
+	medusa = new AnimatedModel("models/IllumModels/medusa.fbx");
+	tiburonMartillo = new AnimatedModel("models/IllumModels/tiburonmartillo.fbx");
+	orca = new AnimatedModel("models/IllumModels/orca1.fbx");
+	tortuga = new AnimatedModel("models/IllumModels/tortuga.fbx");
+	pinguino = new AnimatedModel("models/IllumModels/pinguino.fbx");
+	cangrejo = new AnimatedModel("models/IllumModels/cangrejo.fbx");
+	langosta = new AnimatedModel("models/IllumModels/langosta.fbx");
+	pezLabios = new AnimatedModel("models/IllumModels/pezLabiosDulces.fbx");
+	manati = new AnimatedModel("models/IllumModels/manati1.fbx");
+	caballito = new AnimatedModel("models/IllumModels/caballito.fbx");
 
 
 
 	// Cubemap
 	vector<std::string> faces
 	{
-		"textures/cubemap/01/posx.png",
-		"textures/cubemap/01/negx.png",
-		"textures/cubemap/01/posy.png",
-		"textures/cubemap/01/negy.png",
-		"textures/cubemap/01/posz.png",
-		"textures/cubemap/01/negz.png"
+		"textures/cubemap/01/posx.jpg",
+		"textures/cubemap/01/negx.jpg",
+		"textures/cubemap/01/posy.jpg",
+		"textures/cubemap/01/negy.jpg",
+		"textures/cubemap/01/posz.jpg",
+		"textures/cubemap/01/negz.jpg"
 	};
 	mainCubeMap = new CubeMap();
 	mainCubeMap->loadCubemap(faces);
@@ -1851,14 +1905,6 @@ bool Update() {
 
 
 
-
-
-
-
-
-
-
-
 	//**********************************
 	//		     PLANTA
 	//**********************************
@@ -1907,6 +1953,794 @@ bool Update() {
 	}
 
 	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//		    IGLÚ
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(50.0f, 0.0f, -220.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(15.0f,15.0f, 15.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		iglu->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+
+
+	//**********************************
+	//		    PALMERA
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(80.0f, -9.0f, -370.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.25f, 1.25f, 1.25f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		palmera->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(60.0f, -9.0f, -280.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.25f, 1.25f, 1.25f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		palmera->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+
+
+	//**********************************
+	//		    ARBUSTO
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-140.0f, 0.0f, -305.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(13.0f, 13.0f, 13.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		arbusto->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-100.0f, 0.0f, -370.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(16.0f, 16.0f, 16.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		arbusto->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+	
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-100.0f, 0.0f, -370.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(16.0f, 16.0f, 16.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		arbusto->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+	//**********************************
+	//		    PEPINO
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-150.0f, 0.0f, -150.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		pepino->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//		    CAMARÓN
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-60.0f, 15.0f, -315.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		camaron->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//		    MESA
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(25.0f, -9.0f, -90.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.2f, 3.2f, 3.2f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		mesa->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//		    PIEDRA
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(150.0f, -3.0f, -190.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		piedra->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//		    MANGLAR
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-130.0f, 0.0f, -315.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		manglar->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-80.0f, 0.0f, -355.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		manglar->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-70.0f, 0.0f, -325.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		manglar->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//		    ARRECIFE
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-70.0f, -2.0f, -170.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(-45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		arrecife->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
 
 
 
@@ -2484,6 +3318,737 @@ bool Update() {
 
 
 	
+
+
+
+	//**********************************
+	//			PEZ TROPICAL
+	//**********************************
+
+
+	{
+		pezTropical->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-110.0f, 2.5f, -165.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, pezTropical->gBones);
+
+		// Dibujamos el modelo
+		pezTropical->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+	//**********************************
+	//			PEZ PAYASO
+	//**********************************
+
+
+	{
+		pezPayaso->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(140.0f, 2.5f, -300.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, pezPayaso->gBones);
+
+		// Dibujamos el modelo
+		pezPayaso->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//			TIBURON BLANCO
+	//**********************************
+
+
+	{
+		tiburonBlanco->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(60.0f, 15.0f, -350.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, tiburonBlanco->gBones);
+
+		// Dibujamos el modelo
+		tiburonBlanco->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+	//**********************************
+	//			PEZ ESPADA
+	//**********************************
+
+
+	{
+		pezEspada->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(110.0f, 25.0f, -350.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, pezEspada->gBones);
+
+		// Dibujamos el modelo
+		pezEspada->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+	//**********************************
+	//			COCODRILO
+	//**********************************
+
+
+	{
+		cocodrilo->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-60.0f, 0.0f, -250.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(-175.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, cocodrilo->gBones);
+
+		// Dibujamos el modelo
+		cocodrilo->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+	//**********************************
+	//			SERPIENTE
+	//**********************************
+
+
+	{
+		serpiente->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-50.0f, 0.0f, -330.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, serpiente->gBones);
+
+		// Dibujamos el modelo
+		serpiente->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+	//**********************************
+	//			OSO POLAR
+	//**********************************
+
+
+	{
+		osoPolar->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(50.0f, 0.0f, -180.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(-135.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, osoPolar->gBones);
+
+		// Dibujamos el modelo
+		osoPolar->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+	//**********************************
+	//			MEDUSA
+	//**********************************
+
+
+	{
+		medusa->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-180.0f, 25.0f, -220.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.07f, 0.07f, 0.07f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, medusa->gBones);
+
+		// Dibujamos el modelo
+		medusa->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+	//**********************************
+	//			MEDUSA
+	//**********************************
+
+
+	{
+		medusa->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(100.0f, 20.0f, -390.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.07f, 0.07f, 0.07f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, medusa->gBones);
+
+		// Dibujamos el modelo
+		medusa->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//		  TIBURÓN MARTILLO
+	//**********************************
+
+
+	{
+		tiburonMartillo->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(150.0f, 20.0f, -320.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(130.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.24f, 0.24f, 0.24f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, tiburonMartillo->gBones);
+
+		// Dibujamos el modelo
+		tiburonMartillo->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//			ORCA
+	//**********************************
+
+
+	{
+		orca->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-80.0f, 30.0f, -230.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, orca->gBones);
+
+		// Dibujamos el modelo
+		orca->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//			TORTUGA
+	//**********************************
+
+
+	{
+		tortuga->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(150.0f, 0.0f, -310.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, tortuga->gBones);
+
+		// Dibujamos el modelo
+		tortuga->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//			PINGUINO
+	//**********************************
+
+
+	{
+		pinguino->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-10.0f, -2.0f, -240.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, pinguino->gBones);
+
+		// Dibujamos el modelo
+		pinguino->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//			CANGREJO
+	//**********************************
+
+
+	{
+		cangrejo->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(100.0f, 0.0f, -370.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, cangrejo->gBones);
+
+		// Dibujamos el modelo
+		cangrejo->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//			LANGOSTA
+	//**********************************
+
+
+	{
+		langosta->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-100.0f, -2.0f, -310.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, langosta->gBones);
+
+		// Dibujamos el modelo
+		langosta->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//		PEZ LABIOS DULCES
+	//**********************************
+
+
+	{
+		pezLabios->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-160.0f, 18.0f, -180.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, pezLabios->gBones);
+
+		// Dibujamos el modelo
+		pezLabios->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//			MANATÍ
+	//**********************************
+
+
+	{
+		manati->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(130.0f, 30.0f, -400.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, manati->gBones);
+
+		// Dibujamos el modelo
+		manati->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//			CABALLITO DE MAR
+	//**********************************
+
+
+	{
+		caballito->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-130.0f, 30.0f, -180.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, caballito->gBones);
+
+		// Dibujamos el modelo
+		caballito->Draw(*dynamicShader);
+	}
+
+
+	glUseProgram(0);
+
+
 
 
 
