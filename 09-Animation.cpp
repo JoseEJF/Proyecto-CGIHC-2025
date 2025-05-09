@@ -75,6 +75,8 @@ Shader *mLightsShader;
 Shader *proceduralShader;
 Shader *wavesShader;
 Shader* phongShader;
+Shader* fresnelShader;
+
 
 Shader *cubemapShader;
 Shader *dynamicShader;
@@ -108,13 +110,14 @@ Model* planta;
 Model* iglu;
 Model* palmera;
 Model* arbusto;
-
 Model* pepino;
 Model* camaron;
 Model* mesa;
 Model* piedra;
 Model* manglar;
 Model* arrecife;
+Model* domo;
+Model* pasto;
 
 
 // Modelos animados
@@ -230,6 +233,7 @@ bool Start() {
 	wavesShader = new Shader("shaders/13_wavesAnimation.vs", "shaders/13_wavesAnimation.fs");
 	cubemapShader = new Shader("shaders/10_vertex_cubemap.vs", "shaders/10_fragment_cubemap.fs");
 	dynamicShader = new Shader("shaders/10_vertex_skinning-IT.vs", "shaders/10_fragment_skinning-IT.fs");
+	fresnelShader = new Shader("shaders/11_fresnel.vs", "shaders/11_fresnel.fs");
 
 	// Máximo número de huesos: 100
 	dynamicShader->setBonesIDs(MAX_RIGGING_BONES);
@@ -266,13 +270,15 @@ bool Start() {
 	palmera = new Model("models/IllumModels/palmera.fbx");
 	anemona = new Model("models/IllumModels/anemona.fbx");
 	arbusto = new Model("models/IllumModels/bush.fbx");
-
 	pepino = new Model("models/IllumModels/pepino.fbx");
 	camaron = new Model("models/IllumModels/camaron.fbx");
 	arrecife = new Model("models/IllumModels/arrecife.fbx");
 	manglar = new Model("models/IllumModels/manglar.fbx");
 	mesa = new Model("models/IllumModels/mesa.fbx");
 	piedra = new Model("models/IllumModels/piedra.fbx");
+	domo = new Model("models/IllumModels/domo.fbx");
+	pasto = new Model("models/IllumModels/pasto.fbx");
+	
 
 
 
@@ -485,13 +491,15 @@ bool Update() {
 		// Actividad 5.1
 		// Efecto de puerta corrediza
 		 //model = glm::translate(model, glm::vec3(0.418f + door_offset, 0.0f, 6.75f));
-		
+		 model = glm::translate(model, glm::vec3(13.0f, -35.0f, -20.0f));
+		 model = glm::scale(model, glm::vec3(26.0f, 26.0f, 26.0f));
 		// Efecto de puerta con bisagra
-		//model = glm::rotate(model, glm::radians(door_rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+		 model = glm::rotate(model, glm::radians(door_rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+		 model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		 
 
-		// model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		// mLightsShader->setMat4("model", model);
-		 //door->Draw(*mLightsShader);
+		 mLightsShader->setMat4("model", model);
+		 door->Draw(*mLightsShader);
 	}
 
 	glUseProgram(0);
@@ -1015,8 +1023,8 @@ bool Update() {
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(-200.0f, 60.0f, -200.0f)); // translate it down so it's at the center of the scene
-		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(80.0f, 80.0f, 80.0f));	// it's a bit too big for our scene, so scale it down
+		model = glm::rotate(model, glm::radians(-50.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(60.0f, 60.0f, 60.0f));	// it's a bit too big for our scene, so scale it down
 		mLightsShader->setMat4("model", model);
 
 		// Configuramos propiedades de fuentes de luz
@@ -2738,15 +2746,103 @@ bool Update() {
 
 
 
+	// Dibujamos un objeto cualquiera
+	{
+		// Activamos el shader de Phong
+		fresnelShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		fresnelShader->setMat4("projection", projection);
+		fresnelShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-131.0f, 24.0f, -190.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(77.0f, 77.0f, 77.0f));
+		
+
+		fresnelShader->setMat4("model", model);
+		fresnelShader->setVec3("cameraPosition", camera.Position);
+		fresnelShader->setFloat("mRefractionRatio", 1.0f / 1.333f); // 1.333 Agua
+		fresnelShader->setFloat("_Bias", 0.1f);
+		fresnelShader->setFloat("_Scale", 0.1f);
+		fresnelShader->setFloat("_Power", 1.0f);
+
+		domo->Draw(*fresnelShader);
+
+	}
+
+	glUseProgram(0);
 
 
 
 
 
 
+
+
+	//**********************************
+	//		    PASTO
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, -6.0f, 0.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(480.0f, 480.0f, 480.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
+		mLightsShader->setFloat("transparency", material01.transparency);
+
+		pasto->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
+
+
+
+
+
+	/*
 
 	// Actividad 5.2
-	/*
+	
 	{
 		// Activamos el shader de Phong
 		proceduralShader->use();
@@ -2776,8 +2872,8 @@ bool Update() {
 	}
 
 	glUseProgram(0);
+	
 	*/
-
 
 
 
