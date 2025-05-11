@@ -33,12 +33,14 @@ using namespace irrklang;
 // Functions
 bool Start();
 bool Update();
+bool UpdatePickingProcess();
 
 // Definición de callbacks
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
 // Gobals
 GLFWwindow* window;
@@ -48,8 +50,8 @@ const unsigned int SCR_WIDTH = 1024;
 const unsigned int SCR_HEIGHT = 768;
 
 // Definición de cámara (posición en XYZ)
-Camera camera(glm::vec3(0.0f, 2.0f, 10.0f));
-Camera camera3rd(glm::vec3(0.0f, 0.0f, 0.0f));
+Camera camera(glm::vec3(0.0f, 2.0f, 10.0f));//////////////////////////////////// 2 en y
+Camera camera3rd(glm::vec3(0.0f, 0.0f, 0.0f));////////////////////0 en y
 
 // Controladores para el movimiento del mouse
 float lastX = SCR_WIDTH / 2.0f;
@@ -62,11 +64,11 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 float elapsedTime = 0.0f;
 
-glm::vec3 position(0.0f,0.0f, 0.0f);
-glm::vec3 forwardView(0.0f, 0.0f, 1.0f);
+glm::vec3 position(0.0f,-5.0f, 0.0f);
+glm::vec3 forwardView(0.0f, 0.0f, -1.0f);
 float     trdpersonOffset = 1.5f;
 float     scaleV = 0.025f;
-float     rotateCharacter = 0.0f;
+float     rotateCharacter = 10.0f;
 float	  door_offset = 0.0f;
 float	  door_rotation = 0.0f;
 
@@ -80,7 +82,7 @@ Shader* fresnelShader;
 
 Shader *cubemapShader;
 Shader *dynamicShader;
-
+Shader* pickingShader;
 // Carga la información del modelo
 Model	*house;
 Model   *door;
@@ -150,6 +152,7 @@ AnimatedModel* langosta;
 AnimatedModel* pezLabios;
 AnimatedModel* manati;
 AnimatedModel* caballito;
+AnimatedModel* personaje;
 
 
 
@@ -165,6 +168,9 @@ std::vector<Light> gLights;
 
 // Materiales
 Material material01;
+Material oro;
+Material perla;
+Material plata; 
 
 float proceduralTime = 0.0f;
 float wavesTime = 0.0f;
@@ -184,8 +190,8 @@ int main()
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
-		if (!Update())
-			break;
+		//if (!UpdatePickingProcess()) break;
+		if (!Update()) break;
 	}
 
 	glfwTerminate();
@@ -200,6 +206,8 @@ bool Start() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	///////////////////////////////////////////////////AGREQUÉ EL BOTÓN DEL MOUSE//////////////////////////////////////
+	
 
 	// Creación de la ventana con GLFW
 	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Animation", NULL, NULL);
@@ -213,6 +221,7 @@ bool Start() {
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetMouseButtonCallback(window, mouseButtonCallback);
 
 	// Ocultar el cursor mientras se rota la escena
 	// glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -234,7 +243,7 @@ bool Start() {
 	cubemapShader = new Shader("shaders/10_vertex_cubemap.vs", "shaders/10_fragment_cubemap.fs");
 	dynamicShader = new Shader("shaders/10_vertex_skinning-IT.vs", "shaders/10_fragment_skinning-IT.fs");
 	fresnelShader = new Shader("shaders/11_fresnel.vs", "shaders/11_fresnel.fs");
-
+	pickingShader = new Shader("shaders/15_picking.vs", "shaders/15_picking.fs");
 	// Máximo número de huesos: 100
 	dynamicShader->setBonesIDs(MAX_RIGGING_BONES);
 
@@ -316,7 +325,7 @@ bool Start() {
 	pezLabios = new AnimatedModel("models/IllumModels/pezLabiosDulces.fbx");
 	manati = new AnimatedModel("models/IllumModels/manati1.fbx");
 	caballito = new AnimatedModel("models/IllumModels/caballito.fbx");
-
+	personaje = new AnimatedModel("models/IllumModels/personaje.fbx");
 
 
 	// Cubemap
@@ -337,11 +346,90 @@ bool Start() {
 	camera3rd.Position -= trdpersonOffset * forwardView;
 	camera3rd.Front = forwardView;
 
+	
+
+
+
+	// Configuración de propiedades materiales
+// Tabla: http://devernay.free.fr/cours/opengl/materials.html
+
+	//ESTE MATERIAL ES PERLA
+	perla.ambient = glm::vec4(0.25f, 0.20725f, 0.20725f, 1.0f);
+	perla.diffuse = glm::vec4(1.0f, 0.829f, 0.829f, 1.0f);
+	perla.specular = glm::vec4(0.296648f, 0.296648f, 0.296648f, 1.0f);
+	perla.transparency = 1.0f;
+
+	//ESTE MATERIAL ES ORO
+	oro.ambient = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
+	oro.diffuse = glm::vec4(0.7f, 0.7f, 0.7f, 1.0f);
+	oro.specular = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	oro.transparency = 1.0f;
+
+	//ESTE MATERIAL ES PLATA
+	plata.ambient = glm::vec4(0.19225f, 0.19225f, 0.19225f, 1.0f);
+	plata.diffuse = glm::vec4(0.50754f, 0.50754f, 0.50754f, 1.0f);
+	plata.specular = glm::vec4(0.508273f, 0.508273f, 0.508273f, 1.0f);
+	plata.transparency = 1.0f;
+
+
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+	glm::vec4 warmYellow = glm::vec4(1.0f, 0.85f, 0.3f, 1.0f) * 0.7f;
+
+	Light light01;
+	light01.Position = glm::vec3(0.0f, 10.0f, -100.0f);
+	light01.Color = warmYellow;
+	light01.Color *= 0.1f;
+	gLights.push_back(light01);
+
+
+	Light light02;
+	light02.Position = glm::vec3(-120.0f, 10.0f, -230.0f);
+	light02.Color = warmYellow;
+	light02.Color *= 0.1f;
+	gLights.push_back(light02);
+
+	Light light03;
+	light03.Position = glm::vec3(120.0f, 10.0f, -230.0f);
+	light03.Color = warmYellow;
+	light03.Color *= 0.1f;
+	gLights.push_back(light03);
+
+	Light light04;
+	light04.Position = glm::vec3(0.0f, 10.0f, -350.0f);
+	light04.Color = warmYellow;
+	light04.Color *= 0.1f;
+	gLights.push_back(light04);
+
+
+
+
+	Light light05;
+	light05.Position = glm::vec3(0.0f, 20.0f, -30.0f);
+	light05.Color = warmYellow;
+	light05.Color *= 0.1f;
+	gLights.push_back(light05);
+
+
+	
+	
+	
+	
+	
+	/*
+	
 	// Lights configuration
-
-
-
-
 
 	Light light01;
 	light01.Position = glm::vec3(5.0f, 4.0f, 5.0f);
@@ -377,6 +465,7 @@ bool Start() {
 
 	
 	// SoundEngine->play2D("sound/EternalGarden.mp3", true);
+	*/
 
 	return true;
 }
@@ -430,6 +519,10 @@ bool Update() {
 
 	if (activeCamera) {
 		// Cámara en primera persona
+
+	
+		
+
 		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
 		view = camera.GetViewMatrix();
 	}
@@ -445,6 +538,37 @@ bool Update() {
 	}
 	
 
+	// Objeto animado
+	//****************************************************************
+
+		//						PERSONAJE
+
+	//****************************************************************
+	
+	{
+		personaje->UpdateAnimation(deltaTime);
+
+		// Activación del shader del personaje
+		dynamicShader->use();
+
+		// Aplicamos transformaciones de proyección y cámara (si las hubiera)
+		dynamicShader->setMat4("projection", projection);
+		dynamicShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, position); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(rotateCharacter+180.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.04f, 0.04f, 0.04f));	// it's a bit too big for our scene, so scale it down
+
+		dynamicShader->setMat4("model", model);
+
+		dynamicShader->setMat4("gBones", MAX_RIGGING_BONES, personaje->gBones);
+
+		// Dibujamos el modelo
+		personaje->Draw(*dynamicShader);
+	}
+	
 	//**********************************
 	//		       ACUARIO
 	//**********************************
@@ -479,10 +603,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", perla.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", perla.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", perla.specular);
+		mLightsShader->setFloat("transparency", perla.transparency);
 
 		house->Draw(*mLightsShader);
 
@@ -4167,6 +4291,165 @@ bool Update() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	bool UpdatePickingProcess()
+	{
+		// Cálculo del framerate
+		float currentFrame = (float)glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		// Procesa la entrada del teclado o mouse
+		processInput(window);
+
+		// Renderizado R - G - B - A
+		glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glm::mat4 projection;
+		glm::mat4 view;
+
+		if (activeCamera) {
+			// Cámara en primera persona
+			projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
+			view = camera.GetViewMatrix();
+		}
+		else {
+			// cámara en tercera persona
+			projection = glm::perspective(glm::radians(camera3rd.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
+			view = camera3rd.GetViewMatrix();
+		}
+
+
+
+		{
+			pickingShader->use();
+
+			pickingShader->setMat4("projection", projection);
+			pickingShader->setMat4("view", view);
+
+			// Aplicamos transformaciones del modelo
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, glm::vec3(13.0f, -35.0f, -20.0f));
+			model = glm::scale(model, glm::vec3(26.0f, 26.0f, 26.0f));
+			// Efecto de puerta con bisagra
+			model = glm::rotate(model, glm::radians(door_rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+			pickingShader->setMat4("model", model);
+
+			// Convert "i", the integer mesh ID, into an RGB color
+			int r = (door->IDforPicking & 0x000000FF) >> 0;
+			int g = (door->IDforPicking & 0x0000FF00) >> 8;
+			int b = (door->IDforPicking & 0x00FF0000) >> 16;
+			pickingShader->setVec4("PickingColor", glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f));
+
+			door->Draw(*pickingShader);
+		}
+
+		glUseProgram(0);
+
+		// glfw: swap buffers 
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+
+		return true;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Procesamos entradas del teclado
 void processInput(GLFWwindow* window)
 {
@@ -4201,18 +4484,18 @@ void processInput(GLFWwindow* window)
 	// Character movement
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 
-		position = position + scaleV * forwardView;
+		position = position + (scaleV * forwardView* speedMultiplier);/////////////////////
 		camera3rd.Front = forwardView;
-		camera3rd.ProcessKeyboard(FORWARD, deltaTime);
+		camera3rd.ProcessKeyboard(FORWARD, deltaTime* speedMultiplier);////////////////////FRONTWARD
 		camera3rd.Position = position;
 		camera3rd.Position.y += 1.7f;
 		camera3rd.Position -= trdpersonOffset * forwardView;
 
 	}
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		position = position - scaleV * forwardView;
+		position = position - (scaleV * forwardView* speedMultiplier);///////////////////////
 		camera3rd.Front = forwardView;
-		camera3rd.ProcessKeyboard(BACKWARD, deltaTime);
+		camera3rd.ProcessKeyboard(BACKWARD, deltaTime* speedMultiplier);/////////////
 		camera3rd.Position = position;
 		camera3rd.Position.y += 1.7f;
 		camera3rd.Position -= trdpersonOffset * forwardView;
@@ -4222,7 +4505,7 @@ void processInput(GLFWwindow* window)
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::rotate(model, glm::radians(rotateCharacter), glm::vec3(0.0f, 1.0f, 0.0f));
-		glm::vec4 viewVector = model * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+		glm::vec4 viewVector = model * glm::vec4(0.0f, 0.0f, -1.0f, 1.0f);
 		forwardView = glm::vec3(viewVector);
 		forwardView = glm::normalize(forwardView);
 
@@ -4236,13 +4519,13 @@ void processInput(GLFWwindow* window)
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::rotate(model, glm::radians(rotateCharacter), glm::vec3(0.0f, 1.0f, 0.0f));
-		glm::vec4 viewVector = model * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+		glm::vec4 viewVector = model * glm::vec4(0.0f, 0.0f, -1.0f, 1.0f);
 		forwardView = glm::vec3(viewVector);
 		forwardView = glm::normalize(forwardView);
 
 		camera3rd.Front = forwardView;
 		camera3rd.Position = position;
-		camera3rd.Position.y += 1.7f;////////////////////////////////////////////////////////////////////////////////////////////1.7f
+		camera3rd.Position.y += 1.7f;
 		camera3rd.Position -= trdpersonOffset * forwardView;
 	}
 
@@ -4251,6 +4534,28 @@ void processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS)
 		activeCamera = 1;
 	
+}
+
+
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)) {
+		// Mouse button clicked
+		// read pixel picked
+		unsigned char data[4];
+		glReadPixels(SCR_WIDTH / 2, SCR_HEIGHT / 2, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		// Convert the color back to an integer ID
+		unsigned int pickedID =
+			data[0] +
+			data[1] * 256 +
+			data[2] * 256 * 256;
+		if (pickedID == 0x00ffffff) { // Full white, must be the background !
+			printf("Background\n");
+		}
+		else {
+			printf("Picked Mesh %d\n", pickedID);
+		}
+	}
 }
 
 // glfw: Actualizamos el puerto de vista si hay cambios del tamaño
