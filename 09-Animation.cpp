@@ -51,7 +51,7 @@ const unsigned int SCR_HEIGHT = 768;
 
 // Definición de cámara (posición en XYZ)
 Camera camera(glm::vec3(0.0f, 2.0f, 10.0f));//////////////////////////////////// 2 en y
-Camera camera3rd(glm::vec3(0.0f, 0.0f, 0.0f));////////////////////0 en y
+Camera camera3rd(glm::vec3(0.0f, 0.0f, 0.0f));////////////////////0 en y y 0 en z
 
 // Controladores para el movimiento del mouse
 float lastX = SCR_WIDTH / 2.0f;
@@ -342,11 +342,11 @@ bool Start() {
 	mainCubeMap->loadCubemap(faces);
 
 	camera3rd.Position = position;
-	camera3rd.Position.y += 1.7f;
+	camera3rd.Position.y += 8.5f;
 	camera3rd.Position -= trdpersonOffset * forwardView;
 	camera3rd.Front = forwardView;
 
-	
+	//camera.Position.y += 4.7f;
 
 
 
@@ -671,10 +671,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		algas->Draw(*mLightsShader);
 
@@ -718,10 +718,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		algas->Draw(*mLightsShader);
 
@@ -768,10 +768,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		algas->Draw(*mLightsShader);
 
@@ -818,10 +818,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		algas->Draw(*mLightsShader);
 
@@ -867,10 +867,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		algas->Draw(*mLightsShader);
 
@@ -914,10 +914,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		algas->Draw(*mLightsShader);
 
@@ -961,10 +961,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		algas->Draw(*mLightsShader);
 
@@ -1008,10 +1008,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		algas->Draw(*mLightsShader);
 
@@ -1058,10 +1058,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		algas->Draw(*mLightsShader);
 
@@ -1110,10 +1110,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		anemona->Draw(*mLightsShader);
 
@@ -1165,10 +1165,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", perla.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", perla.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", perla.specular);
+		mLightsShader->setFloat("transparency", perla.transparency);
 
 		ballena->Draw(*mLightsShader);
 
@@ -1242,10 +1242,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		conchademar->Draw(*mLightsShader);
 
@@ -1290,10 +1290,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		conchademar->Draw(*mLightsShader);
 
@@ -1347,10 +1347,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		erizo->Draw(*mLightsShader);
 
@@ -1393,10 +1393,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		erizo->Draw(*mLightsShader);
 
@@ -1446,10 +1446,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", perla.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", perla.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", perla.specular);
+		mLightsShader->setFloat("transparency", perla.transparency);
 
 		estrella->Draw(*mLightsShader);
 
@@ -1499,10 +1499,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		lampara->Draw(*mLightsShader);
 
@@ -1557,10 +1557,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", oro.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", oro.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", oro.specular);
+		mLightsShader->setFloat("transparency", oro.transparency);
 
 		nenufar->Draw(*mLightsShader);
 
@@ -1604,10 +1604,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", oro.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", oro.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", oro.specular);
+		mLightsShader->setFloat("transparency", oro.transparency);
 
 		nenufar->Draw(*mLightsShader);
 
@@ -1651,10 +1651,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", oro.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", oro.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", oro.specular);
+		mLightsShader->setFloat("transparency", oro.transparency);
 
 		nenufar->Draw(*mLightsShader);
 
@@ -1703,10 +1703,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", perla.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", perla.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", perla.specular);
+		mLightsShader->setFloat("transparency", perla.transparency);
 
 		rana->Draw(*mLightsShader);
 
@@ -1760,10 +1760,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", oro.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", oro.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", oro.specular);
+		mLightsShader->setFloat("transparency", oro.transparency);
 
 		sillon->Draw(*mLightsShader);
 
@@ -1807,10 +1807,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", oro.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", oro.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", oro.specular);
+		mLightsShader->setFloat("transparency", oro.transparency);
 
 		sillon->Draw(*mLightsShader);
 
@@ -1859,10 +1859,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		esponja->Draw(*mLightsShader);
 
@@ -1910,10 +1910,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		iceberg->Draw(*mLightsShader);
 
@@ -1961,10 +1961,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		letrero->Draw(*mLightsShader);
 
@@ -2016,10 +2016,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		maceta->Draw(*mLightsShader);
 
@@ -2073,10 +2073,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", oro.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", oro.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", oro.specular);
+		mLightsShader->setFloat("transparency", oro.transparency);
 
 		planta->Draw(*mLightsShader);
 
@@ -2114,7 +2114,9 @@ bool Update() {
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(50.0f, 0.0f, -220.0f)); // translate it down so it's at the center of the scene
-		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(270.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		
 		model = glm::scale(model, glm::vec3(15.0f,15.0f, 15.0f));	// it's a bit too big for our scene, so scale it down
 		mLightsShader->setMat4("model", model);
 
@@ -2132,10 +2134,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		iglu->Draw(*mLightsShader);
 
@@ -2186,10 +2188,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", oro.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", oro.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", oro.specular);
+		mLightsShader->setFloat("transparency", oro.transparency);
 
 		palmera->Draw(*mLightsShader);
 
@@ -2232,10 +2234,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", oro.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", oro.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", oro.specular);
+		mLightsShader->setFloat("transparency", oro.transparency);
 
 		palmera->Draw(*mLightsShader);
 
@@ -2286,10 +2288,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		arbusto->Draw(*mLightsShader);
 
@@ -2333,10 +2335,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		arbusto->Draw(*mLightsShader);
 
@@ -2387,10 +2389,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		arbusto->Draw(*mLightsShader);
 
@@ -2443,10 +2445,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", perla.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", perla.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", perla.specular);
+		mLightsShader->setFloat("transparency", perla.transparency);
 
 		pepino->Draw(*mLightsShader);
 
@@ -2500,10 +2502,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		camaron->Draw(*mLightsShader);
 
@@ -2559,10 +2561,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		mesa->Draw(*mLightsShader);
 
@@ -2629,10 +2631,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
 
 		piedra->Draw(*mLightsShader);
 
@@ -2691,10 +2693,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", perla.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", perla.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", perla.specular);
+		mLightsShader->setFloat("transparency", perla.transparency);
 
 		manglar->Draw(*mLightsShader);
 
@@ -2739,10 +2741,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", perla.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", perla.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", perla.specular);
+		mLightsShader->setFloat("transparency", perla.transparency);
 
 		manglar->Draw(*mLightsShader);
 
@@ -2795,10 +2797,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", perla.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", perla.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", perla.specular);
+		mLightsShader->setFloat("transparency", perla.transparency);
 
 		manglar->Draw(*mLightsShader);
 
@@ -2853,10 +2855,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", oro.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", oro.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", oro.specular);
+		mLightsShader->setFloat("transparency", oro.transparency);
 
 		arrecife->Draw(*mLightsShader);
 
@@ -2946,10 +2948,10 @@ bool Update() {
 		mLightsShader->setVec3("eye", camera.Position);
 
 		// Aplicamos propiedades materiales
-		mLightsShader->setVec4("MaterialAmbientColor", material01.ambient);
-		mLightsShader->setVec4("MaterialDiffuseColor", material01.diffuse);
-		mLightsShader->setVec4("MaterialSpecularColor", material01.specular);
-		mLightsShader->setFloat("transparency", material01.transparency);
+		mLightsShader->setVec4("MaterialAmbientColor", perla.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", perla.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", perla.specular);
+		mLightsShader->setFloat("transparency", perla.transparency);
 
 		pasto->Draw(*mLightsShader);
 
@@ -3073,7 +3075,12 @@ bool Update() {
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(100.0f, 8.0f, -220.0f)); // translate it down so it's at the center of the scene
-		model = glm::rotate(model, glm::radians(rotateCharacter), glm::vec3(0.0, 1.0f, 0.0f));
+		// Rotación de 90° en X
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		
+		// Luego rotación de 270° en Y
+		//model = glm::rotate(model, glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.03f, 0.03f, 0.03f));	// it's a bit too big for our scene, so scale it down
 
 		dynamicShader->setMat4("model", model);
@@ -4212,7 +4219,7 @@ bool Update() {
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(130.0f, 30.0f, -400.0f)); // translate it down so it's at the center of the scene
-		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
 
 		dynamicShader->setMat4("model", model);
@@ -4488,16 +4495,19 @@ void processInput(GLFWwindow* window)
 		camera3rd.Front = forwardView;
 		camera3rd.ProcessKeyboard(FORWARD, deltaTime* speedMultiplier);////////////////////FRONTWARD
 		camera3rd.Position = position;
-		camera3rd.Position.y += 1.7f;
+		camera3rd.Position.y += 6.5f;
+		//camera3rd.Position.z += 3.5f;
+		//camera3rd.Position.x += 2.0f;
 		camera3rd.Position -= trdpersonOffset * forwardView;
 
 	}
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+ 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 		position = position - (scaleV * forwardView* speedMultiplier);///////////////////////
 		camera3rd.Front = forwardView;
 		camera3rd.ProcessKeyboard(BACKWARD, deltaTime* speedMultiplier);/////////////
 		camera3rd.Position = position;
-		camera3rd.Position.y += 1.7f;
+		camera3rd.Position.y += 6.5f;
+		//camera3rd.Position.z += 3.5f;
 		camera3rd.Position -= trdpersonOffset * forwardView;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
@@ -4511,7 +4521,9 @@ void processInput(GLFWwindow* window)
 
 		camera3rd.Front = forwardView;
 		camera3rd.Position = position;
-		camera3rd.Position.y += 1.7f;
+		camera3rd.Position.y += 6.5f;
+		//camera3rd.Position.x += 1.0f;
+		//camera3rd.Position.z += 2.5f;
 		camera3rd.Position -= trdpersonOffset * forwardView;
 	}
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
@@ -4525,7 +4537,9 @@ void processInput(GLFWwindow* window)
 
 		camera3rd.Front = forwardView;
 		camera3rd.Position = position;
-		camera3rd.Position.y += 1.7f;
+		camera3rd.Position.y += 6.5f;
+		//camera3rd.Position.z += 2.5f;
+		//camera3rd.Position.x += 1.0f;
 		camera3rd.Position -= trdpersonOffset * forwardView;
 	}
 
