@@ -285,7 +285,7 @@ bool Start() {
 	manglar = new Model("models/IllumModels/manglar.fbx");
 	mesa = new Model("models/IllumModels/mesa.fbx");
 	piedra = new Model("models/IllumModels/piedra.fbx");
-	domo = new Model("models/IllumModels/domo.fbx");
+	domo = new Model("models/IllumModels/domo2.fbx");
 	pasto = new Model("models/IllumModels/pasto.fbx");
 	
 
@@ -372,20 +372,10 @@ bool Start() {
 	plata.transparency = 1.0f;
 
 
-	
-	
-	
+	//COLOR DE LUZ
 
+	glm::vec4 warmYellow = glm::vec4(0.65f, 0.75f, 1.0f, 1.0f) * 0.9f;
 
-
-
-
-
-
-
-
-
-	glm::vec4 warmYellow = glm::vec4(1.0f, 0.85f, 0.3f, 1.0f) * 0.7f;
 
 	Light light01;
 	light01.Position = glm::vec3(0.0f, 10.0f, -100.0f);
@@ -462,10 +452,9 @@ bool Start() {
 	light04.Color *= 0.7f;
 
 	gLights.push_back(light04);
-
-	
-	// SoundEngine->play2D("sound/EternalGarden.mp3", true);
 	*/
+
+	SoundEngine->play2D("sound/acuario.mp3", true);
 
 	return true;
 }
@@ -584,7 +573,7 @@ bool Update() {
 
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -250.0f)); // translate it down so it's at the center of the scene
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f,0.0f)); // translate it down so it's at the center of the scene
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
 		mLightsShader->setMat4("model", model);
@@ -1091,7 +1080,7 @@ bool Update() {
 
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-80.0f, 1.0f, -160.0f)); // translate it down so it's at the center of the scene
+		model = glm::translate(model, glm::vec3(-80.0f, -2.0f, -160.0f)); // translate it down so it's at the center of the scene
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));	// it's a bit too big for our scene, so scale it down
 		mLightsShader->setMat4("model", model);
@@ -1146,9 +1135,9 @@ bool Update() {
 
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-200.0f, 60.0f, -200.0f)); // translate it down so it's at the center of the scene
-		model = glm::rotate(model, glm::radians(-50.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(60.0f, 60.0f, 60.0f));	// it's a bit too big for our scene, so scale it down
+		model = glm::translate(model, glm::vec3(-150.0f, 58.0f, -200.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(-60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(45.0f, 45.0f, 45.0f));	// it's a bit too big for our scene, so scale it down
 		mLightsShader->setMat4("model", model);
 
 		// Configuramos propiedades de fuentes de luz
@@ -1684,7 +1673,7 @@ bool Update() {
 
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-100.0f, -6.0f, -300.0f)); // translate it down so it's at the center of the scene
+		model = glm::translate(model, glm::vec3(-100.0f, -4.5f, -300.0f)); // translate it down so it's at the center of the scene
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));	// it's a bit too big for our scene, so scale it down
 		mLightsShader->setMat4("model", model);
@@ -2887,9 +2876,9 @@ bool Update() {
 
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-131.0f, 24.0f, -190.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(77.0f, 77.0f, 77.0f));
+		model = glm::scale(model, glm::vec3(71.0f, 71.0f, 71.0f));
 		
 
 		fresnelShader->setMat4("model", model);
@@ -3956,7 +3945,7 @@ bool Update() {
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(-80.0f, 30.0f, -230.0f)); // translate it down so it's at the center of the scene
-		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
 
 		dynamicShader->setMat4("model", model);
@@ -4219,7 +4208,7 @@ bool Update() {
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(130.0f, 30.0f, -400.0f)); // translate it down so it's at the center of the scene
-		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
 
 		dynamicShader->setMat4("model", model);
