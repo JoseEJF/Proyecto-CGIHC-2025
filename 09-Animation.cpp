@@ -41,6 +41,9 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+float ActualizarPuerta(float& door_rotation, const glm::vec3& puertaPos, const glm::vec3& personajePos);
+
+
 
 // Gobals
 GLFWwindow* window;
@@ -50,7 +53,7 @@ const unsigned int SCR_WIDTH = 1024;
 const unsigned int SCR_HEIGHT = 768;
 
 // Definición de cámara (posición en XYZ)
-Camera camera(glm::vec3(0.0f, 2.0f, 10.0f));//////////////////////////////////// 2 en y
+Camera camera(glm::vec3(0.0f, 2.0f, 45.0f));//////////////////////////////////// 2 en y
 Camera camera3rd(glm::vec3(0.0f, 0.0f, 0.0f));////////////////////0 en y y 0 en z
 
 // Controladores para el movimiento del mouse
@@ -64,13 +67,19 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 float elapsedTime = 0.0f;
 
-glm::vec3 position(0.0f,-5.0f, 0.0f);
+glm::vec3 position(0.0f,-5.0f, 50.0f); //(0.0f, -5.0f, 0.0f);
 glm::vec3 forwardView(0.0f, 0.0f, -1.0f);
-float     trdpersonOffset = 1.5f;
+float     trdpersonOffset = 5.5f;
 float     scaleV = 0.025f;
 float     rotateCharacter = 10.0f;
+
+
 float	  door_offset = 0.0f;
 float	  door_rotation = 0.0f;
+glm::vec3 doorPosition = glm::vec3(13.0f, -35.0f, -35.0f); // igual que la que usas para dibujar la puerta
+
+float bush_move = 0.0f;
+
 
 // Shaders
 Shader *mLightsShader;
@@ -120,6 +129,24 @@ Model* manglar;
 Model* arrecife;
 Model* domo;
 Model* pasto;
+Model* aerostatico;
+Model* cartel;
+Model* cofre;
+
+Model* antartidaCart;
+Model* arrecifeCart;
+Model* costaCart;
+Model* flecha;
+Model* manglarCart;
+Model* profundoCart;
+
+
+Model* arrecifeInfo;
+Model* antartidaInfo;
+Model* costaInfo;
+Model* manglarInfo;
+Model* profundoInfo;
+
 
 
 // Modelos animados
@@ -179,7 +206,7 @@ float wavesTime = 0.0f;
 ISoundEngine *SoundEngine = createIrrKlangDevice();
 
 // selección de cámara
-bool    activeCamera = 1; // activamos la primera cámara
+bool    activeCamera = 0; // activamos la primera cámara
 
 // Entrada a función principal
 int main()
@@ -278,15 +305,34 @@ bool Start() {
 	iglu = new Model("models/IllumModels/iglu.fbx");
 	palmera = new Model("models/IllumModels/palmera.fbx");
 	anemona = new Model("models/IllumModels/anemona.fbx");
-	arbusto = new Model("models/IllumModels/bush.fbx");
+	arbusto = new Model("models/IllumModels/arbusto.fbx");
 	pepino = new Model("models/IllumModels/pepino.fbx");
 	camaron = new Model("models/IllumModels/camaron.fbx");
 	arrecife = new Model("models/IllumModels/arrecife.fbx");
 	manglar = new Model("models/IllumModels/manglar.fbx");
 	mesa = new Model("models/IllumModels/mesa.fbx");
 	piedra = new Model("models/IllumModels/piedra.fbx");
-	domo = new Model("models/IllumModels/domo2.fbx");
+	domo = new Model("models/IllumModels/domo.fbx");
 	pasto = new Model("models/IllumModels/pasto.fbx");
+	aerostatico = new Model("models/IllumModels/aerostatico.fbx");
+	cartel = new Model("models/IllumModels/cartel.fbx");
+	cofre = new Model("models/IllumModels/cofre.fbx");
+
+
+	antartidaCart = new Model("models/IllumModels/ANTARTIDA.fbx");
+	arrecifeCart = new Model("models/IllumModels/ARRECIFEC.fbx");
+	costaCart = new Model("models/IllumModels/COSTA.fbx");
+	manglarCart = new Model("models/IllumModels/MANGLARC.fbx");
+	profundoCart = new Model("models/IllumModels/PROFUNDO.fbx");
+	flecha = new Model("models/IllumModels/flecha.fbx");
+
+
+	arrecifeInfo = new Model("models/IllumModels/INFOARECIFE.fbx");
+	antartidaInfo = new Model("models/IllumModels/INFORANTARTIDA.fbx");
+	costaInfo = new Model("models/IllumModels/INFOCOSTA.fbx");
+	manglarInfo = new Model("models/IllumModels/INFOMANGLAR.fbx");
+	profundoInfo = new Model("models/IllumModels/INFOPROFUNDO.fbx");
+
 	
 
 
@@ -378,31 +424,30 @@ bool Start() {
 
 
 	Light light01;
-	light01.Position = glm::vec3(0.0f, 10.0f, -100.0f);
+	light01.Position = glm::vec3(0.0f, 50.0f, -100.0f);
 	light01.Color = warmYellow;
 	light01.Color *= 0.1f;
 	gLights.push_back(light01);
 
-
+	
 	Light light02;
-	light02.Position = glm::vec3(-120.0f, 10.0f, -230.0f);
+	light02.Position = glm::vec3(0.0f, 50.0f, 250.0f);
 	light02.Color = warmYellow;
 	light02.Color *= 0.1f;
 	gLights.push_back(light02);
+	
 
 	Light light03;
-	light03.Position = glm::vec3(120.0f, 10.0f, -230.0f);
+	light03.Position = glm::vec3(120.0f, 50.0f, -230.0f);
 	light03.Color = warmYellow;
 	light03.Color *= 0.1f;
 	gLights.push_back(light03);
 
 	Light light04;
-	light04.Position = glm::vec3(0.0f, 10.0f, -350.0f);
+	light04.Position = glm::vec3(0.0f, 50.0f, -350.0f);
 	light04.Color = warmYellow;
 	light04.Color *= 0.1f;
 	gLights.push_back(light04);
-
-
 
 
 	Light light05;
@@ -495,7 +540,7 @@ bool Update() {
 	float currentFrame = (float)glfwGetTime();
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
-
+	
 	// Procesa la entrada del teclado o mouse
 	processInput(window);
 
@@ -526,6 +571,14 @@ bool Update() {
 		mainCubeMap->drawCubeMap(*cubemapShader, projection, view);
 	}
 	
+
+
+
+
+	ActualizarPuerta(door_rotation, doorPosition, camera.Position);
+
+
+
 
 	// Objeto animado
 	//****************************************************************
@@ -601,13 +654,15 @@ bool Update() {
 
 		model = glm::mat4(1.0f);
 
+
 		// Actividad 5.1
 		// Efecto de puerta corrediza
 		 //model = glm::translate(model, glm::vec3(0.418f + door_offset, 0.0f, 6.75f));
 		 model = glm::translate(model, glm::vec3(13.0f, -35.0f, -20.0f));
 		 model = glm::scale(model, glm::vec3(26.0f, 26.0f, 26.0f));
 		// Efecto de puerta con bisagra
-		 model = glm::rotate(model, glm::radians(door_rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+		
+		 model = glm::rotate(model, glm::radians(ActualizarPuerta(door_rotation, doorPosition, camera.Position)), glm::vec3(0.0f, 1.0f, 0.0f));//model = glm::rotate(model, glm::radians(door_rotation), glm::vec3(0.0f, 1.0f, 0.0f));
 		 model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		 
 
@@ -615,6 +670,805 @@ bool Update() {
 		 door->Draw(*mLightsShader);
 	}
 
+	glUseProgram(0);
+
+
+
+
+
+
+	//**********************************
+	//		       CARTEL ANTARTIDA
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, 12.0f, -140.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(6.0f,6.0f, 6.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+		
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		antartidaCart->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//		       CARTEL INFO-ANTARTIDA
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, -195.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(rotateCharacter), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		antartidaInfo->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+
+
+	//**********************************
+	//		       CARTEL ANTARTIDA-MANGLAR-COSTA
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-3.0f, 9.0f, -255.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		antartidaCart->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+	//**********************************
+	//		       CARTEL ARRECIFE
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-60.0f, 12.0f, -110.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		arrecifeCart->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+
+
+	//**********************************
+	//		       CARTEL INFO-ARRECIFE
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-105.0f, 0.0f,-220.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(rotateCharacter), glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		arrecifeInfo->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+
+
+	//***************************************
+	//		       CARTEL ARRECIFE-MANGLAR
+	//***************************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-118.0f, 9.0f, -240.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		arrecifeCart->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+	//**********************************
+	//		       CARTEL PROFUNDO
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(58.0f, 12.0f, -110.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		profundoCart->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+
+	//**********************************
+	//		       CARTEL INFO-PROFUNDO
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(140.0f, 0.0f, -180.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(rotateCharacter), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		profundoInfo->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+	//**********************************
+	//		       CARTEL PROFUNDO-COSTA
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(122.0f, 8.0f, -235.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		profundoCart->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+
+
+	//**********************************
+	//		       CARTEL COSTA-ANTARTIDA-MANGLAR
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(35.0f, 9.0f, -310.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		costaCart->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+
+
+
+	//**********************************
+	//		       CARTEL COSTA-PROFUNDO
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(94.0f, 8.5f, -275.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		costaCart->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+	//**********************************
+	//		       CARTEL INFO-COSTA
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(55.0f, 5.0f, -350.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(rotateCharacter), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		costaInfo->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+
+
+
+
+
+
+
+
+	//**********************************
+	//		       CARTEL MANGLAR
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-102.0f, 8.5f, -280.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		manglarCart->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+	//**********************************
+	//		       CARTEL INFO-MANGLAR
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-125.0f, 0.0f, -295.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(rotateCharacter), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		manglarInfo->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+	glUseProgram(0);
+
+
+
+
+
+
+
+	//**********************************
+	//		       CARTEL MANGLAR-ANTARTIDA-COSTA
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-45.0f, 8.5f, -310.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		manglarCart->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
 	glUseProgram(0);
 
 
@@ -1730,7 +2584,7 @@ bool Update() {
 
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-20.0f, -5.0f, -130.0f)); // translate it down so it's at the center of the scene
+		model = glm::translate(model, glm::vec3(-20.0f, -4.0f, -130.0f)); // translate it down so it's at the center of the scene
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));	// it's a bit too big for our scene, so scale it down
 		mLightsShader->setMat4("model", model);
@@ -1777,7 +2631,7 @@ bool Update() {
 
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(30.0f, -5.0f, -130.0f)); // translate it down so it's at the center of the scene
+		model = glm::translate(model, glm::vec3(30.0f, -4.0f, -130.0f)); // translate it down so it's at the center of the scene
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));	// it's a bit too big for our scene, so scale it down
 		mLightsShader->setMat4("model", model);
@@ -1915,7 +2769,7 @@ bool Update() {
 
 
 	//**********************************
-	//		       LETRERO
+	//		       LETRERO-CARTEL ENTRADA
 	//**********************************
 
 
@@ -1931,9 +2785,9 @@ bool Update() {
 
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(5.0f, 25.0f, -20.0f)); // translate it down so it's at the center of the scene
+		model = glm::translate(model, glm::vec3(0.0f, 25.0f, -20.0f)); // translate it down so it's at the center of the scene
 		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));	// it's a bit too big for our scene, so scale it down
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));	// it's a bit too big for our scene, so scale it down
 		mLightsShader->setMat4("model", model);
 
 		// Configuramos propiedades de fuentes de luz
@@ -1955,7 +2809,7 @@ bool Update() {
 		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
 		mLightsShader->setFloat("transparency", plata.transparency);
 
-		letrero->Draw(*mLightsShader);
+		cartel->Draw(*mLightsShader);
 
 		model = glm::mat4(1.0f);
 
@@ -2258,7 +3112,7 @@ bool Update() {
 
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-140.0f, 0.0f, -305.0f)); // translate it down so it's at the center of the scene
+		model = glm::translate(model, glm::vec3(-140.0f, 0.0f+bush_move, -305.0f)); // translate it down so it's at the center of the scene
 		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(13.0f, 13.0f, 13.0f));	// it's a bit too big for our scene, so scale it down
 		mLightsShader->setMat4("model", model);
@@ -2341,6 +3195,56 @@ bool Update() {
 
 
 
+
+
+	//**********************************
+	//		    CAMARÓN SORPRESA
+	//**********************************
+
+
+	{
+		mLightsShader->use();
+
+		// Activamos para objetos transparentes
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		mLightsShader->setMat4("projection", projection);
+		mLightsShader->setMat4("view", view);
+
+		// Aplicamos transformaciones del modelo
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-140.0f, 0.0f , -305.0f)); // translate it down so it's at the center of the scene
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));	// it's a bit too big for our scene, so scale it down
+		mLightsShader->setMat4("model", model);
+
+		// Configuramos propiedades de fuentes de luz
+		mLightsShader->setInt("numLights", (int)gLights.size());
+		for (size_t i = 0; i < gLights.size(); ++i) {
+			SetLightUniformVec3(mLightsShader, "Position", i, gLights[i].Position);
+			SetLightUniformVec3(mLightsShader, "Direction", i, gLights[i].Direction);
+			SetLightUniformVec4(mLightsShader, "Color", i, gLights[i].Color);
+			SetLightUniformVec4(mLightsShader, "Power", i, gLights[i].Power);
+			SetLightUniformInt(mLightsShader, "alphaIndex", i, gLights[i].alphaIndex);
+			SetLightUniformFloat(mLightsShader, "distance", i, gLights[i].distance);
+		}
+
+		mLightsShader->setVec3("eye", camera.Position);
+
+		// Aplicamos propiedades materiales
+		mLightsShader->setVec4("MaterialAmbientColor", plata.ambient);
+		mLightsShader->setVec4("MaterialDiffuseColor", plata.diffuse);
+		mLightsShader->setVec4("MaterialSpecularColor", plata.specular);
+		mLightsShader->setFloat("transparency", plata.transparency);
+
+		cofre->Draw(*mLightsShader);
+
+		model = glm::mat4(1.0f);
+
+	}
+
+	glUseProgram(0);
 
 
 
@@ -2861,6 +3765,7 @@ bool Update() {
 
 
 
+
 	// Dibujamos un objeto cualquiera
 	{
 		// Activamos el shader de Phong
@@ -2876,10 +3781,10 @@ bool Update() {
 
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-131.0f, 24.0f, -190.0f));
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(71.0f, 71.0f, 71.0f));
-		
+		model = glm::scale(model, glm::vec3(77.0f, 77.0f, 77.0f));
+
 
 		fresnelShader->setMat4("model", model);
 		fresnelShader->setVec3("cameraPosition", camera.Position);
@@ -2893,6 +3798,9 @@ bool Update() {
 	}
 
 	glUseProgram(0);
+
+
+
 
 
 
@@ -2952,9 +3860,11 @@ bool Update() {
 
 
 
+	//*****************************************************************************************************
+	//*****************************************************************************************************
+	//*****************************************************************************************************
 
-
-	/*
+	
 
 	// Actividad 5.2
 	
@@ -2972,23 +3882,24 @@ bool Update() {
 
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::translate(model, glm::vec3(50.0f, 80.0f, -130.0f));
+		model = glm::rotate(model, glm::radians(-180.0f), glm::vec3(1.0f, 0.0f, .0f));
+		model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
 		proceduralShader->setMat4("model", model);
 
 		proceduralShader->setFloat("time", proceduralTime);
-		proceduralShader->setFloat("radius", 5.0f);
-		proceduralShader->setFloat("height", 0.0f);
+		proceduralShader->setFloat("radius", 8.0f);
+		proceduralShader->setFloat("selfRotationSpeed", 1.0f);
+		proceduralShader->setFloat("height",60.0f);
 
-		moon->Draw(*proceduralShader);
+		aerostatico->Draw(*proceduralShader);
 		proceduralTime += 0.01;
 
 	}
 
 	glUseProgram(0);
 	
-	*/
+	
 
 
 
@@ -3000,7 +3911,7 @@ bool Update() {
 
 
 	// Actividad 5.3
-	/*
+	
 	{
 		// Activamos el shader de Phong
 		wavesShader->use();
@@ -3015,9 +3926,9 @@ bool Update() {
 
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(158.0f, -4.3f, -395.0f));
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(32.0f, 32.0f, 32.0f));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
 		wavesShader->setMat4("model", model);
 
 		wavesShader->setFloat("time", wavesTime);
@@ -3031,7 +3942,7 @@ bool Update() {
 
 	glUseProgram(0);
 	
-	*/
+	
 
 
 
@@ -3040,7 +3951,9 @@ bool Update() {
 
 
 
-
+//*****************************************************************************************************
+//*****************************************************************************************************
+//*****************************************************************************************************
 
 
 
@@ -3343,7 +4256,7 @@ bool Update() {
 		// Aplicamos transformaciones del modelo
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(30.0f, -3.0f, -230.0f)); // translate it down so it's at the center of the scene
-		model = glm::rotate(model, glm::radians(rotateCharacter), glm::vec3(0.0, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.045f, 0.045f, 0.045f));	// it's a bit too big for our scene, so scale it down
 
 		dynamicShader->setMat4("model", model);
@@ -4295,15 +5208,23 @@ bool Update() {
 
 
 
+	float ActualizarPuerta(float& door_rotation, const glm::vec3& puertaPos, const glm::vec3& personajePos) {
+		float distancia = glm::distance(personajePos, puertaPos);
+		float umbral = 5.0f;       // distancia para que se active
+		float velocidad = 10.0f;     // velocidad de apertura/cierre
+		float rotacionMax = 90.0f;  // ángulo máximo
 
+		if (distancia < umbral) {
+			if (door_rotation < rotacionMax)
+				door_rotation += velocidad;
+		}
+		else {
+			if (door_rotation > 0.0f)
+				door_rotation -= velocidad;
+		}
 
-
-
-
-
-
-
-
+		return door_rotation;
+	}
 
 
 
@@ -4448,6 +5369,7 @@ bool Update() {
 
 // Procesamos entradas del teclado
 void processInput(GLFWwindow* window)
+
 {
 	float speedMultiplier = 14.0f;
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -4476,6 +5398,10 @@ void processInput(GLFWwindow* window)
 		door_rotation += 1.f;
 	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
 		door_rotation -= 1.f;
+	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+		bush_move += 0.1f;
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+		bush_move -= 0.1f;
 
 	// Character movement
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
@@ -4531,6 +5457,8 @@ void processInput(GLFWwindow* window)
 		//camera3rd.Position.x += 1.0f;
 		camera3rd.Position -= trdpersonOffset * forwardView;
 	}
+	// Actualiza la puerta automáticamente si el personaje se acerca
+	ActualizarPuerta(door_rotation, doorPosition, camera3rd.Position);
 
 	if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS)
 		activeCamera = 0;
